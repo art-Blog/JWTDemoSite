@@ -1,4 +1,5 @@
-﻿using JwtDemoSite.Models;
+﻿using System.Security.Claims;
+using JwtDemoSite.Models;
 
 namespace JwtDemoSite.Modules.Implement
 {
@@ -8,7 +9,7 @@ namespace JwtDemoSite.Modules.Implement
         {
             if (account.ToLower() == "art" && password == "1234")
             {
-                // TODO: should verify user from db
+                // 此處應該要從資料庫判斷使用者是否存在，並回傳使用者資訊
                 var testUser = new User()
                 {
                     Account = "art",
@@ -18,8 +19,20 @@ namespace JwtDemoSite.Modules.Implement
                 };
                 return testUser;
             }
-
+            // 查無使用者 (帳密錯誤)
             return null;
+        }
+
+        public ClaimsIdentity CreateClaimsIdentityByUser(User user)
+        {
+            return new ClaimsIdentity(
+                new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.EmployeeNo.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim("Account", user.Account),
+                    new Claim(ClaimTypes.Email, user.EmailAccount),
+                });
         }
     }
 }

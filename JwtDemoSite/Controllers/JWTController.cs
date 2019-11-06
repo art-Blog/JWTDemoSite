@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Web.Mvc;
 using JwtDemoSite.Factory;
 using JwtDemoSite.Filters;
@@ -40,14 +39,8 @@ namespace JwtDemoSite.Controllers
             }
 
             // 產生token
-            var identity = new ClaimsIdentity(
-               new[]
-                 {
-                      new Claim(ClaimTypes.NameIdentifier, user.EmployeeNo.ToString()),
-                      new Claim(ClaimTypes.Name, user.UserName),
-                      new Claim("Account", user.Account),
-                      new Claim(ClaimTypes.Email, user.EmailAccount),
-                 });
+            var identity = UserModule.CreateClaimsIdentityByUser(user);
+
             var token = JWTHelper.GenerateToken(identity);
 
             return Json(new APIResult() { Data = token, IsSuccess = true, Message = string.Empty });
@@ -72,7 +65,7 @@ namespace JwtDemoSite.Controllers
         [JWTAuth]
         public JsonResult FeatureB()
         {
-            return Json(new APIResult() { IsSuccess = true, Message = "不允許執行" });
+            return Json(new APIResult() { IsSuccess = true, Message = "你不應該看到這個訊息" });
         }
     }
 }

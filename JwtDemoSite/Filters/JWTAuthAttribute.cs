@@ -23,7 +23,6 @@ namespace JwtDemoSite.Filters
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            // 解析header取得principal
             var principal = ParseAuthorizeHeader(httpContext);
             if (principal == null) return false;
 
@@ -40,6 +39,11 @@ namespace JwtDemoSite.Filters
             return result;
         }
 
+        /// <summary>
+        /// 解析header取得principal
+        /// </summary>
+        /// <param name="httpContext">The HTTP context.</param>
+        /// <returns></returns>
         private ClaimsPrincipal ParseAuthorizeHeader(HttpContextBase httpContext)
         {
             var token = httpContext.Request.Headers["Authorization"];
