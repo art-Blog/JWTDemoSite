@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JwtDemoSite.Helper
@@ -58,7 +59,7 @@ namespace JwtDemoSite.Helper
                     ValidateAudience = false,
                     IssuerSigningKey = new SymmetricSecurityKey(symmetricKey)
                 };
-
+                IdentityModelEventSource.ShowPII = true;
                 var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
 
                 return principal;

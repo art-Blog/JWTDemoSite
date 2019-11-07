@@ -38,7 +38,7 @@ namespace JwtDemoSiteTests
         public void 有token無權限執行回應unauthorized()
         {
             var queryUrl = "JWT/FeatureB";
-            var token = GenerateToken();
+            var token = GenerateTestToken();
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
             var queryResponse = _client.PostAsync(queryUrl, null).Result;
             Assert.AreEqual(HttpStatusCode.Unauthorized, queryResponse.StatusCode);
@@ -48,22 +48,22 @@ namespace JwtDemoSiteTests
         public void 有權限執行回應ok()
         {
             var queryUrl = "JWT/FeatureA";
-            var token = GenerateToken();
+            var token = GenerateTestToken();
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
             var queryResponse = _client.PostAsync(queryUrl, null).Result;
             Assert.AreEqual(HttpStatusCode.OK, queryResponse.StatusCode);
         }
 
-        private string GenerateToken()
+        private string GenerateTestToken()
         {
             var identity = new ClaimsIdentity(
             new[]
-              {
-                      new Claim(ClaimTypes.NameIdentifier, "123456"),
-                      new Claim(ClaimTypes.Name, "蜘蛛人"),
-                      new Claim("Account", "spiderman"),
-                      new Claim(ClaimTypes.Email, "spiderman@email.com"),
-              });
+                {
+                    new Claim(ClaimTypes.NameIdentifier, "123456"),
+                    new Claim(ClaimTypes.Name, "蜘蛛人"),
+                    new Claim("Account", "spiderman"),
+                    new Claim(ClaimTypes.Email, "spiderman@email.com"),
+                });
             var token = JWTHelper.GenerateToken(identity);
             return token;
         }

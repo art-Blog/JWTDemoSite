@@ -15,7 +15,7 @@ namespace JwtDemoSite.Controllers
         /// </summary>
         private readonly Lazy<IUserModule> _userModule = new Lazy<IUserModule>(ModuleFactory.GetUserModule);
 
-        protected IUserModule UserModule => this._userModule.Value;
+        protected IUserModule UserModule => _userModule.Value;
 
         /// <summary>
         /// 取得JWT Token
@@ -27,23 +27,19 @@ namespace JwtDemoSite.Controllers
         {
             // 輸入驗證
             if (string.IsNullOrEmpty(loginForm.Account) || string.IsNullOrEmpty(loginForm.Password))
-            {
-                return Json(new APIResult() { Message = "請輸入帳號密碼", IsSuccess = false });
-            }
+                return Json(new APIResult { Message = "請輸入帳號密碼", IsSuccess = false });
 
             // 驗證使用者
             var user = UserModule.VerifyUser(loginForm.Account, loginForm.Password);
             if (user == null)
-            {
-                return Json(new APIResult() { Message = "帳號密碼錯誤", IsSuccess = false });
-            }
+                return Json(new APIResult { Message = "帳號密碼錯誤", IsSuccess = false });
 
             // 產生token
             var identity = UserModule.CreateClaimsIdentityByUser(user);
 
             var token = JWTHelper.GenerateToken(identity);
 
-            return Json(new APIResult() { Data = token, IsSuccess = true, Message = string.Empty });
+            return Json(new APIResult { Data = token, IsSuccess = true, Message = string.Empty });
         }
 
         /// <summary>
@@ -54,7 +50,7 @@ namespace JwtDemoSite.Controllers
         [JWTAuth]
         public JsonResult FeatureA()
         {
-            return Json(new APIResult() { IsSuccess = true, Message = "允許執行" });
+            return Json(new APIResult { IsSuccess = true, Message = "允許執行" });
         }
 
         /// <summary>
@@ -65,7 +61,7 @@ namespace JwtDemoSite.Controllers
         [JWTAuth]
         public JsonResult FeatureB()
         {
-            return Json(new APIResult() { IsSuccess = true, Message = "你不應該看到這個訊息" });
+            return Json(new APIResult { IsSuccess = true, Message = "你不應該看到這個訊息" });
         }
     }
 }
