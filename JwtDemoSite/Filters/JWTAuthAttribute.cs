@@ -3,8 +3,8 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using JwtDemoSite.Factory;
-using JwtDemoSite.Helper;
 using JwtDemoSite.Modules;
+using JwtDemoSite.Modules.Token;
 
 namespace JwtDemoSite.Filters
 {
@@ -19,6 +19,14 @@ namespace JwtDemoSite.Filters
         {
             get => this._systemAuthorityModule ?? (this._systemAuthorityModule = ModuleFactory.GetSystemAuthorityModule());
             set => this._systemAuthorityModule = value;
+        }
+
+        private ITokenModule _tokenModule;
+
+        protected ITokenModule TokenModule
+        {
+            get => this._tokenModule ?? (this._tokenModule = ModuleFactory.GetTokenModule());
+            set => this._tokenModule = value;
         }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
@@ -50,7 +58,7 @@ namespace JwtDemoSite.Filters
             if (string.IsNullOrEmpty(token)) return null;
 
             token = token.Replace("Bearer ", string.Empty);
-            var principal = JWTHelper.GetPrincipal(token);
+            var principal = TokenModule.GetPrincipal(token);
 
             return principal;
         }

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using JwtDemoSite.Helper;
+using JwtDemoSite.Modules.Token.Implement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JwtDemoSiteTests
@@ -18,11 +18,13 @@ namespace JwtDemoSiteTests
 
         private const string Host = "http://localhost:17459";
         private static HttpClient _client;
+        private HmacTokenModule _hmacTokenModule;
 
         [TestInitialize]
         public void BeforeEach()
         {
             _client = new HttpClient { BaseAddress = new Uri(Host) };
+            _hmacTokenModule = new HmacTokenModule();
         }
 
         [TestMethod]
@@ -57,14 +59,14 @@ namespace JwtDemoSiteTests
         private string GenerateTestToken()
         {
             var identity = new ClaimsIdentity(
-            new[]
+                new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, "123456"),
                     new Claim(ClaimTypes.Name, "蜘蛛人"),
                     new Claim("Account", "spiderman"),
-                    new Claim(ClaimTypes.Email, "spiderman@email.com"),
+                    new Claim(ClaimTypes.Email, "spiderman@email.com")
                 });
-            var token = JWTHelper.GenerateToken(identity);
+            var token = _hmacTokenModule.GenerateToken(identity);
             return token;
         }
     }

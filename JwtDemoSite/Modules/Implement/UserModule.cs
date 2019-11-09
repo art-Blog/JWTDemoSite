@@ -3,7 +3,7 @@ using JwtDemoSite.Models;
 
 namespace JwtDemoSite.Modules.Implement
 {
-    public class UserModule : IUserModule
+    internal class UserModule : IUserModule
     {
         public User VerifyUser(string account, string password)
         {

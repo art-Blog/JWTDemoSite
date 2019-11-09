@@ -5,19 +5,13 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JwtDemoSite.Helper
+namespace JwtDemoSite.Modules.Token.Implement
 {
-    public class JWTHelper
+    internal class HmacTokenModule : ITokenModule
     {
-        private static readonly string Key = ConfigurationManager.AppSettings["JWTKey"];
+        protected string Key = ConfigurationManager.AppSettings["JWTKey"];
 
-        /// <summary>
-        /// 產生Token
-        /// </summary>
-        /// <param name="identity">The identity.</param>
-        /// <param name="expireMinutes">有效時間</param>
-        /// <returns></returns>
-        public static string GenerateToken(ClaimsIdentity identity, int expireMinutes = 20)
+        public string GenerateToken(ClaimsIdentity identity, int expireMinutes = 20)
         {
             var symmetricKey = Convert.FromBase64String(Key);
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -38,12 +32,7 @@ namespace JwtDemoSite.Helper
             return token;
         }
 
-        /// <summary>
-        /// 解析Token
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        public static ClaimsPrincipal GetPrincipal(string token)
+        public ClaimsPrincipal GetPrincipal(string token)
         {
             try
             {

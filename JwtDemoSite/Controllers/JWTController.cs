@@ -2,9 +2,9 @@
 using System.Web.Mvc;
 using JwtDemoSite.Factory;
 using JwtDemoSite.Filters;
-using JwtDemoSite.Helper;
 using JwtDemoSite.Models;
 using JwtDemoSite.Modules;
+using JwtDemoSite.Modules.Token;
 
 namespace JwtDemoSite.Controllers
 {
@@ -16,6 +16,9 @@ namespace JwtDemoSite.Controllers
         private readonly Lazy<IUserModule> _userModule = new Lazy<IUserModule>(ModuleFactory.GetUserModule);
 
         protected IUserModule UserModule => _userModule.Value;
+
+        private readonly Lazy<ITokenModule> _tokenModule = new Lazy<ITokenModule>(ModuleFactory.GetTokenModule);
+        protected ITokenModule TokenModule => _tokenModule.Value;
 
         /// <summary>
         /// 取得JWT Token
@@ -37,7 +40,7 @@ namespace JwtDemoSite.Controllers
             // 產生token
             var identity = UserModule.CreateClaimsIdentityByUser(user);
 
-            var token = JWTHelper.GenerateToken(identity);
+            var token = TokenModule.GenerateToken(identity);
 
             return Json(new APIResult { Data = token, IsSuccess = true, Message = string.Empty });
         }

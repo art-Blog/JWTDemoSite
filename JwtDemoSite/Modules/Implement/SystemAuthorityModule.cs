@@ -2,7 +2,7 @@
 
 namespace JwtDemoSite.Modules.Implement
 {
-    public class SystemAuthorityModule : ISystemAuthorityModule
+    internal class SystemAuthorityModule : ISystemAuthorityModule
     {
         public bool ValidateUserFunction(int employeeNo, string[] urls)
         {

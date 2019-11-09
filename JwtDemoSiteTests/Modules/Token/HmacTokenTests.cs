@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Security.Claims;
-using JwtDemoSite.Helper;
 using JwtDemoSite.Models;
+using JwtDemoSite.Modules.Token;
+using JwtDemoSite.Modules.Token.Implement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace JwtDemoSiteTests.Helper
+namespace JwtDemoSiteTests.Modules.Token
 {
     [TestClass]
-    public class JWTHelperTests
+    public class HmacTokenTests
     {
+        private ITokenModule _sut;
+
+        [TestInitialize]
+        public void BeforeEach()
+        {
+            _sut = new HmacTokenModule();
+        }
+
         [TestMethod]
         public void GenerateToken()
         {
@@ -21,7 +30,7 @@ namespace JwtDemoSiteTests.Helper
                     new Claim("Account", user.UserName),
                     new Claim(ClaimTypes.Email, user.EmailAccount)
                 });
-            var token = JWTHelper.GenerateToken(identity);
+            var token = _sut.GenerateToken(identity);
             Console.WriteLine(token);
         }
 
@@ -30,7 +39,7 @@ namespace JwtDemoSiteTests.Helper
         {
             var expected = GetTestUser();
             var token = GenerateTestToken();
-            var principal = JWTHelper.GetPrincipal(token);
+            var principal = _sut.GetPrincipal(token);
             Assert.AreEqual(expected.UserName, principal.Identity.Name);
             Assert.AreEqual(expected.EmployeeNo.ToString(), principal.FindFirst(ClaimTypes.NameIdentifier).Value);
             Assert.AreEqual(expected.Account, principal.FindFirst("Account").Value);
@@ -48,7 +57,7 @@ namespace JwtDemoSiteTests.Helper
                     new Claim("Account", user.Account),
                     new Claim(ClaimTypes.Email, user.EmailAccount)
                 });
-            var token = JWTHelper.GenerateToken(identity);
+            var token = _sut.GenerateToken(identity);
             return token;
         }
 
