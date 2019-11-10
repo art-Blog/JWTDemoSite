@@ -8,29 +8,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace JwtDemoSiteTests.Modules.Token
 {
     [TestClass]
-    public class RsaTokenTests
+    public class ArtTokenTests
     {
         private ITokenModule _sut;
 
         [TestInitialize]
         public void BeforeEach()
         {
-            _sut = new RsaTokenModule();
+            _sut = new ArtTokenModule();
         }
 
         [TestMethod]
         public void GenerateToken()
         {
             var user = GetTestUser();
-            var identity = new ClaimsIdentity(
-                new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.EmployeeNo.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim("Account", user.UserName),
-                    new Claim(ClaimTypes.Email, user.EmailAccount)
-                });
-            var token = _sut.GenerateToken(identity);
+            var token = _sut.GenerateToken(user);
             Console.WriteLine(token);
         }
 
@@ -49,15 +41,7 @@ namespace JwtDemoSiteTests.Modules.Token
         private string GenerateTestToken()
         {
             var user = GetTestUser();
-            var identity = new ClaimsIdentity(
-                new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.EmployeeNo.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim("Account", user.Account),
-                    new Claim(ClaimTypes.Email, user.EmailAccount)
-                });
-            var token = _sut.GenerateToken(identity);
+            var token = _sut.GenerateToken(user);
             return token;
         }
 

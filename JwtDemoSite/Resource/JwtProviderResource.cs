@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using JwtDemoSite.Enums;
-using JwtDemoSite.Modules;
-using JwtDemoSite.Modules.Implement;
 using JwtDemoSite.Modules.Token;
 using JwtDemoSite.Modules.Token.Implement;
 
@@ -40,7 +38,7 @@ namespace JwtDemoSite.Resource
             _strategies = new List<JwtProviderResource>
             {
                 new JwtProviderResource(TokenAlg.Hmac, new HmacTokenModule()),
-                new JwtProviderResource(TokenAlg.Rsa, new RsaTokenModule())
+                new JwtProviderResource(TokenAlg.Custom, new ArtTokenModule())
             };
         }
     }

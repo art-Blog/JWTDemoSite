@@ -11,13 +11,13 @@ namespace JwtDemoSite.Modules.Token.Implement
     {
         protected string Key = ConfigurationManager.AppSettings["JWTKey"];
 
-        public string GenerateToken(ClaimsIdentity identity, int expireMinutes = 20)
+        public string GenerateToken(object identity, int expireMinutes = 20)
         {
             var symmetricKey = Convert.FromBase64String(Key);
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = identity,
+                Subject = (ClaimsIdentity)identity,
                 Expires = DateTime.UtcNow.AddMinutes(expireMinutes),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(symmetricKey),

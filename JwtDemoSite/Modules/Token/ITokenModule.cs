@@ -10,7 +10,7 @@ namespace JwtDemoSite.Modules.Token
         /// <param name="identity">The identity.</param>
         /// <param name="expireMinutes">有效時間</param>
         /// <returns></returns>
-        string GenerateToken(ClaimsIdentity identity, int expireMinutes = 20);
+        string GenerateToken(object identity, int expireMinutes = 20);
 
         /// <summary>
         /// 解析Token
